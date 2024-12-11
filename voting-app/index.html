@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        input, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Blockchain Voting System</h1>
+
+        <h2>Submit Your Vote</h2>
+        <label for="voteId">Vote ID:</label>
+        <input type="text" id="voteId" placeholder="Enter Vote ID">
+        <label for="candidate">Candidate Name:</label>
+        <input type="text" id="candidate" placeholder="Enter Candidate Name">
+        <button onclick="submitVote()">Submit Vote</button>
+
+        <h2>Query All Votes</h2>
+        <button onclick="queryVotes()">View All Votes</button>
+        <pre id="result"></pre>
+    </div>
+
+    <script>
+        async function submitVote() {
+            const voteId = document.getElementById('voteId').value;
+            const candidate = document.getElementById('candidate').value;
+
+            const response = await fetch('http://localhost:8081/submitVote', {
+                method: 'POST',
+		mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ voteId, candidate }),
+            });
+
+            const result = await response.text();
+            alert(result);
+        }
+
+        async function queryVotes() {
+            const response = await fetch('http://localhost:8081/queryAllVotes');
+            const result = await response.text();
+            document.getElementById('result').textContent = result;
+        }
+    </script>
+</body>
+</html>
+
